@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/repository/CoverpicRepository.java" />
+      <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/controller/CoverpicController.java" />
+    </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -10,8 +14,8 @@
         <module name="blog" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="blog" target="1.8" />
+    <bytecodeTargetLevel target="11">
+      <module name="blog" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
