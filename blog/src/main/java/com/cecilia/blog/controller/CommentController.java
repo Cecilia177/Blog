@@ -3,6 +3,7 @@ package com.cecilia.blog.controller;
 import com.cecilia.blog.entity.Article;
 import com.cecilia.blog.entity.Comment;
 import com.cecilia.blog.repository.ArticleRepository;
+import com.cecilia.blog.repository.CommentRepoImp;
 import com.cecilia.blog.repository.CommentRepositoty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class CommentController {
 
     @Autowired
     CommentRepositoty commentRepositoty;
+
+    @Autowired
+    CommentRepoImp commentRepoImp;
 
 
     @ApiOperation(value = "获取所有评论")
@@ -41,8 +45,11 @@ public class CommentController {
     @ApiOperation(value = "增加评论")
     @PostMapping(consumes = "application/json")
     public Comment postComment(@RequestBody Comment comment){
+
         return commentRepositoty.save(comment);
+        //return commentRepoImp.postComment(comment);
     }
+
 
     @ApiOperation(value = "删除评论", notes = "根据评论号删除某条评论")
     @DeleteMapping("/{commentId}")
@@ -53,13 +60,10 @@ public class CommentController {
         } catch (EmptyResultDataAccessException e) {}
     }
 
-    @ApiOperation(value = "更新评论", notes = "根据评论号更新某条评论")
+    @ApiOperation(value = "更新评论", notes = "根据评论号更改是否有效字段")
     @PatchMapping(path = "/{commentId}", consumes = "application/json")
     public Comment patchComment(@PathVariable("commentId") Long commentId, @RequestBody Comment commentToPatch){
         Comment comment = commentRepositoty.findById(commentId).get();
-        if(commentToPatch.getContent() != null){
-            comment.setContent(commentToPatch.getContent());
-        }
         if(commentToPatch.getIsValid() != null){
             comment.setIsValid(commentToPatch.getIsValid());
         }

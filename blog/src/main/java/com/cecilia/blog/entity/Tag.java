@@ -24,9 +24,6 @@ public class Tag {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
-//	@org.hibernate.annotations.Generated(
-////			org.hibernate.annotations.GenerationTime.INSERT
-////	)
 	@org.hibernate.annotations.CreationTimestamp()
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date createdAt;

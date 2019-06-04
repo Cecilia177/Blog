@@ -6,7 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.GenerationTime;
 
@@ -27,7 +29,11 @@ public class Article {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@NotNull
+	@Column(nullable = false, columnDefinition = "varchar(4) default '1'")
+	private String isValid = "1";
+
 	@NotNull
 	@Column(nullable = false)
 	private String title;
@@ -42,14 +48,14 @@ public class Article {
 	
 	@NotNull
 	@Column(nullable = false, columnDefinition = "varchar(4) default '0'")
-	private String isTop;
+	private String isTop = "0";
 	
 	@NotNull
 	@Column(nullable = false, columnDefinition = "INT default 0")
 	private int views;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(insertable = false, updatable = false)        //read-only
+	@Column(updatable = false)
 	@org.hibernate.annotations.CreationTimestamp
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date createdAt;
@@ -60,20 +66,21 @@ public class Article {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date modifiedAt;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Category category;
 
 	private Coverpic coverpic;
 	
 	@OneToMany(mappedBy = "article",
-			fetch = FetchType.EAGER,
+			fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	protected Set<TaggedArticle> taggedArticles = new HashSet<>();
 
 	@OneToMany(mappedBy = "article",
-			fetch = FetchType.EAGER,
+			fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//	@JsonManagedReference
 	private Collection<Comment> comments = new ArrayList<>();
 
 

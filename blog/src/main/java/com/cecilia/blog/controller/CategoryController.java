@@ -2,6 +2,7 @@ package com.cecilia.blog.controller;
 
 import com.cecilia.blog.entity.Article;
 import com.cecilia.blog.entity.Category;
+import com.cecilia.blog.repository.ArticleRepository;
 import com.cecilia.blog.repository.CategoryRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -19,6 +21,9 @@ import java.util.Optional;
 public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ArticleRepository articleRepository;
 
     @ApiOperation(value = "获取所有分类")
     @GetMapping
@@ -58,6 +63,18 @@ public class CategoryController {
         Category category = categoryRepository.findById(categoryId).get();
         if(categoryToPatch.getCategoryName() != null){
             category.setCategoryName(categoryToPatch.getCategoryName());
+        }
+
+        String validOrNot = categoryToPatch.getIsValid();
+        if(validOrNot != null) {
+            category.setIsValid(validOrNot);
+
+            //级联修改该类下所有articles的valid字段
+            Collection<Article> articles = category.getArticles();
+            for(Article article : articles) {
+                article.setIsValid(validOrNot);
+                articleRepository.save(article);
+            }
         }
         return categoryRepository.save(category);
     }

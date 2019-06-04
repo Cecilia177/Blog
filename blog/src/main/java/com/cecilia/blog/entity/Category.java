@@ -8,16 +8,23 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name="tbl_article_category")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Category {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@NotNull
+	@Column(nullable = false, columnDefinition = "varchar(4) default '1'")
+	private String isValid = "1";
+
 	@NotNull
 	private String categoryName;
 
@@ -33,7 +40,8 @@ public class Category {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date modifiedAt;
 
-	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@JsonIgnore
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	Collection<Article> articles = new ArrayList<>();
 
 	

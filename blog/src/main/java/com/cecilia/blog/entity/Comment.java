@@ -5,7 +5,9 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -20,8 +22,8 @@ public class Comment {
 	private String content;
 	
 	@NotNull
-	@Column(nullable = false, columnDefinition = "varchar(4) default '0'")
-	private String isValid;
+	@Column(nullable = false, columnDefinition = "varchar(4) default '1'")
+	private String isValid = "1";
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
@@ -37,7 +39,8 @@ public class Comment {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
+	@JsonBackReference      //序列化时该属性被忽略
 	private Article article;
-	
+
 
 }
