@@ -56,10 +56,13 @@ public class TaggedArticle {
             updatable = false)
     private Article article;
 
+    public TaggedArticle() {
+
+    }
+
     public TaggedArticle(Tag tag, Article article) {
         this.tag = tag;
         this.article = article;
-
         this.id.tagId = tag.getId();
         this.id.articleId = article.getId();
 

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.cecilia.blog.entity.Comment;
 import com.cecilia.blog.entity.Tag;
-import com.cecilia.blog.entity.TaggedArticle;
+
 import com.cecilia.blog.repository.ArticleRepoImp;
 import com.cecilia.blog.repository.CommentRepositoty;
 import com.fasterxml.jackson.databind.util.JSONPObject;
@@ -69,7 +69,7 @@ public class ArticleController {
 		return articleRepository.save(article);
 	}
 
-	@ApiOperation(value = "修改文章标记", notes = "修改isValid/isTop字段")
+	@ApiOperation(value = "修改文章标记", notes = "修改isValid/isTop字段, 修改标签内容")
 	@PatchMapping(value = "/{articleId}", consumes = "application/json")
 	public Article patchArticle(@PathVariable("articleId") Long articleId, @RequestBody Article articleToPatch) {
 
@@ -88,6 +88,12 @@ public class ArticleController {
 				comment.setIsValid(validOrNot);
 				commentRepositoty.save(comment);
 			}
+		}
+
+		Set<Tag> tags = articleToPatch.getTags();
+		if(!tags.isEmpty()) {
+			article.setTags(tags);
+
 		}
 		return articleRepository.save(article);
 	}
@@ -108,13 +114,7 @@ public class ArticleController {
 		Optional<Article> optionalArticle = articleRepository.findById(articleId);
 		if(optionalArticle.isPresent()) {
 			Article article = optionalArticle.get();
-
-			Set<TaggedArticle> taggedArticleSet =  article.getTaggedArticles();
-			Set<Tag> tags = new HashSet<>();
-			for (TaggedArticle taggedArticle: taggedArticleSet) {
-				tags.add(taggedArticle.getTag());
-			}
-			return tags;
+			return article.getTags();
 		}
 		return null;
 	}

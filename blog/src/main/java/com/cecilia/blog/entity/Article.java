@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenerationTime;
 
 @Data
 @Entity
-@Table(name="tbl_article_info")
+@Table(name="tbl_article")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler","fieldHandler"})
 public class Article {
 	@Id
@@ -71,16 +71,20 @@ public class Article {
 	private Category category;
 
 	private Coverpic coverpic;
-	
-	@OneToMany(mappedBy = "article",
-			fetch = FetchType.LAZY,
-			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	protected Set<TaggedArticle> taggedArticles = new HashSet<>();
+
+	@ManyToMany
+	@JoinTable (
+			name = "ARTICLE_TAG",
+			joinColumns = @JoinColumn(name = "ARTICLE_ID"),
+			inverseJoinColumns = @JoinColumn(name = "TAG_ID")
+	)
+	private Set<Tag> tags = new HashSet<>();
+
+
 
 	@OneToMany(mappedBy = "article",
 			fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//	@JsonManagedReference
 	private Collection<Comment> comments = new ArrayList<>();
 
 

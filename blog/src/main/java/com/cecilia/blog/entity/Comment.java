@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="tbl_article_comment")
+@Table(name="tbl_comment")
 public class Comment {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

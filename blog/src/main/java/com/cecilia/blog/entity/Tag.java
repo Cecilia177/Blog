@@ -7,13 +7,15 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenerationTime;
 
 @Data
 @Entity
-@Table(name="tbl_article_tag")
+@Table(name="tbl_tag")
 public class Tag {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,8 +36,14 @@ public class Tag {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date modifiedAt;
 
-	@OneToMany(mappedBy = "tag")
-	protected Set<TaggedArticle> taggedArticles = new HashSet<>();
+	@JsonIgnore
+	@ManyToMany()
+	@JoinTable (
+			name = "ARTICLE_TAG",
+			joinColumns = @JoinColumn(name = "TAG_ID"),
+			inverseJoinColumns = @JoinColumn(name = "ARTICLE_ID")
+	)
+	private Set<Article> articles = new HashSet<>();
 
 	public boolean equals(Object o) {
 		if(o != null && o instanceof Tag) {

@@ -4,6 +4,9 @@
     <excludeFromCompile>
       <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/repository/CoverpicRepository.java" />
       <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/controller/CoverpicController.java" />
+      <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/controller/TaggedArticleController.java" />
+      <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/entity/TaggedArticle.java" />
+      <file url="file://$PROJECT_DIR$/blog/src/main/java/com/cecilia/blog/repository/TaggedArticleRepository.java" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />

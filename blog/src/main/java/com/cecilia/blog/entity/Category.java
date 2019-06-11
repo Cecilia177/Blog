@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="tbl_article_category")
+@Table(name="tbl_category")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Category {
 	@Id
